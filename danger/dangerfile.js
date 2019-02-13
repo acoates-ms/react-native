@@ -1,10 +1,8 @@
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
- * All rights reserved.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  */
 
 'use strict';
@@ -137,21 +135,21 @@ if (danger.github.pr.additions + danger.github.pr.deletions > bigPRThreshold) {
   const idea = `This PR is extremely unlikely to get reviewed because it touches ${danger.github.pr.additions + danger.github.pr.deletions} lines.`;
   warn(`${title} - <i>${idea}</i>`);
 
-  markdown('@facebook-github-bot large-pr');  
+  markdown('@facebook-github-bot large-pr');
 }
 if (danger.git.modified_files + danger.git.added_files + danger.git.deleted_files > bigPRThreshold) {
   const title = ':exclamation: Big PR';
   const idea = `This PR is extremely unlikely to get reviewed because it touches ${danger.git.modified_files + danger.git.added_files + danger.git.deleted_files} files.`;
   warn(`${title} - <i>${idea}</i>`);
 
-  markdown('@facebook-github-bot large-pr');  
+  markdown('@facebook-github-bot large-pr');
 }
 
 // Warns if the bots whitelist file is updated.
 const issueCommandsFileModified = includes(danger.git.modified_files, 'bots/IssueCommands.txt');
 if (issueCommandsFileModified) {
   const title = ':exclamation: Bots';
-  const idea = 'This PR appears to modify the list of people that may issue ' + 
+  const idea = 'This PR appears to modify the list of people that may issue ' +
   'commands to the GitHub bot.';
   warn(`${title} - <i>${idea}</i>`);
 }

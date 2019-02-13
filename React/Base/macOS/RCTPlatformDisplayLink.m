@@ -1,10 +1,8 @@
 /**
  * Copyright (c) 2015-present, Facebook, Inc.
- * All rights reserved.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  */
 
 // TODO(macOS ISS#2323203)
@@ -47,7 +45,7 @@ static CVReturn RCTPlatformDisplayLinkCallBack(__unused CVDisplayLinkRef display
 {
   @autoreleasepool {
     RCTPlatformDisplayLink *rctDisplayLink = (__bridge RCTPlatformDisplayLink*)displayLinkContext;
-    
+
     // Lock and check for invalidation prior to calling out to the runloop
     OSSpinLockLock(&rctDisplayLink->_lock);
     if (rctDisplayLink->_runLoop != nil) {
@@ -73,12 +71,12 @@ static CVReturn RCTPlatformDisplayLinkCallBack(__unused CVDisplayLinkRef display
 - (void)addToRunLoop:(NSRunLoop *)runloop forMode:(NSRunLoopMode)mode
 {
   _runLoop = runloop;
-  
+
   if (_displayLink != NULL) {
     [_modes addObject:mode];
     return;
   }
-  
+
   _modes = @[mode].mutableCopy;
   CVReturn ret = CVDisplayLinkCreateWithActiveCGDisplays(&_displayLink);
   if (ret != kCVReturnSuccess) {
@@ -104,7 +102,7 @@ static CVReturn RCTPlatformDisplayLinkCallBack(__unused CVDisplayLinkRef display
     _runLoop = nil;
     _modes = nil;
     OSSpinLockUnlock(&_lock);
-    
+
     // CVDisplayLinkStop attempts to acquire a mutex possibly held during the callback's invocation.
     // Stop the display link outside of the lock to avoid deadlocking here.
     if (_displayLink != NULL) {

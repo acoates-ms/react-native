@@ -1,14 +1,12 @@
 /**
  * Copyright (c) 2015-present, Facebook, Inc.
- * All rights reserved.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  */
 
 // TODO(macOS ISS#2323203)
- 
+
 #import "RCTProgressView.h"
 
 @implementation RCTProgressView
@@ -19,7 +17,7 @@
   if ((self = [super initWithFrame:frame])) {
     self.maxValue = 1.0;
     self.indeterminate = NO;
-    
+
     // Default track color from NSProgressIndicator.
     self.trackTintColor = [UIColor colorWithRed: 237/255.0 green:237/255.0 blue:237/255.0 alpha:1.0];
   }
@@ -43,11 +41,11 @@
 - (void)drawRect:(NSRect)dirtyRect
 {
   [super drawRect:dirtyRect];
-  
+
   if (self.progressTintColor == nil && self.progressImage == nil) {
     return;
   }
-  
+
   // Clear background color
   [[NSColor clearColor] set];
   NSRectFill(dirtyRect);
@@ -61,7 +59,7 @@
   } else {
     [self.progressImage drawInRect:activeRect];
   }
-  
+
   // Draw empty line
   NSRect passiveRect = [self bounds];
   passiveRect.size.width -= activeRect.size.width;

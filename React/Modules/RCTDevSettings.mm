@@ -118,7 +118,7 @@ static NSString *const kRCTDevSettingsUserDefaultsKey = @"RCTDevMenu";
 }
 
 @property (nonatomic, strong) Class executorClass;
-@property (nonatomic, readwrite, strong) id<RCTDevSettingsDataSource> dataSource;
+@property (atomic, readwrite, strong) id<RCTDevSettingsDataSource> dataSource; // TODO(OSS Candidate ISS#2710739): protect against race conditions where another thread changes the _dataSource
 
 @end
 
@@ -248,12 +248,12 @@ static void pokeSamplingProfiler(RCTBridge *const bridge, RCTPackagerClientRespo
 
 - (void)_updateSettingWithValue:(id)value forKey:(NSString *)key
 {
-  [_dataSource updateSettingWithValue:value forKey:key];
+  [[self dataSource] updateSettingWithValue:value forKey:key]; // TODO(OSS Candidate ISS#2710739): protect against race conditions where another thread changes the _dataSource
 }
 
 - (id)settingForKey:(NSString *)key
 {
-  return [_dataSource settingForKey:key];
+  return [[self dataSource] settingForKey:key]; // TODO(OSS Candidate ISS#2710739): protect against race conditions where another thread changes the _dataSource
 }
 
 - (BOOL)isNuclideDebuggingAvailable
