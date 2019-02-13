@@ -16,6 +16,51 @@ const React = require('react');
 const {StyleSheet, Text, View} = require('react-native');
 const TouchableWithoutFeedback = require('TouchableWithoutFeedback');
 
+class ViewFocusEventsExample extends React.Component<{}, $FlowFixMeState> {
+  state = {
+    showSampleViews: false,
+    showTextView: false,
+  };
+
+  render() {
+    return (
+      <View>
+        <Button onPress={() => this.setState({showSampleViews: !this.state.showSampleViews})} title={(this.state.showSampleViews) ? 'Hide Sample Focus event View' : 'Show Sample View'} />
+        <Button onPress={() => this.defaultFocusView.focus()} title={'Give Focus to default View'} />
+        { (this.state.showSampleViews) ?
+        <View> 
+          <Text> Enter on any view will move focus within this view </Text>
+          <TouchableNativeFeedback onPress={() => this.defaultFocusView.focus()}>
+            <View ref = {v => this.view1 = v} style={[ styles.focusView]} >
+              <Text> Test View</Text>
+            </View>
+          </TouchableNativeFeedback>
+
+          <TouchableNativeFeedback onPress={() => this.view2.focus()}>
+            <View ref = {v => this.defaultFocusView = v} style={[ styles.focusView]} >
+              <Text> Default Focus View </Text>
+            </View>
+          </TouchableNativeFeedback>
+
+          <TouchableNativeFeedback onPress={() => this.view1.focus()}>
+            <View ref = {v => this.view2 = v}
+              style={[ styles.focusView]}
+              onFocusChange = {(hasFocus) => {this.setState({showTextView: hasFocus})}}>
+              <Text> Show sample textview on focus </Text>
+            </View>
+          </TouchableNativeFeedback>
+          {
+            this.state.showTextView ? 
+            <Text> This is a sample Text</Text>
+            : null
+          }
+        </View> 
+        : null }
+      </View>
+    );
+  }
+}
+
 exports.title = '<View>';
 exports.description =
   'Basic building block of all UI, examples that ' +
@@ -298,5 +343,5 @@ exports.examples = [
       }
       return <ZIndexExample />;
     },
-  },
+  }
 ];

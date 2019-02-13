@@ -15,7 +15,7 @@ const Platform = require('Platform');
 const normalizeColor = require('normalizeColor');
 
 /* eslint no-bitwise: 0 */
-function processColor(color?: ?(string | number)): ?number {
+function processColor(color?: ?(string | number | object)): ?number | ?object { // TODO(macOS ISS#2323203)
   if (color === undefined || color === null) {
     return color;
   }
@@ -24,6 +24,19 @@ function processColor(color?: ?(string | number)): ?number {
   if (int32Color === null || int32Color === undefined) {
     return undefined;
   }
+
+  if (typeof int32Color === 'object' && Platform.OS === 'macos') { // [TODO(macOS ISS#2323203)
+   if (int32Color.hasOwnProperty('dynamic')) {
+     const dynamicColor = {
+       dynamic: {
+         light: processColor(int32Color.dynamic.light),
+         dark: processColor(int32Color.dynamic.dark)
+       }
+     };
+     return dynamicColor;
+   }
+   return int32Color;
+  } // ]TODO(macOS ISS#2323203)
 
   // Converts 0xrrggbbaa into 0xaarrggbb
   int32Color = ((int32Color << 24) | (int32Color >>> 8)) >>> 0;

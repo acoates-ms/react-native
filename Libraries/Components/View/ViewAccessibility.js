@@ -10,6 +10,15 @@
 
 'use strict';
 
+// [TODO(android ISS)
+const PropTypes = require('prop-types');
+const createStrictShapeTypeChecker = require('createStrictShapeTypeChecker');
+
+const AccessibilityNodeInfoPropType = createStrictShapeTypeChecker({
+  clickable: PropTypes.bool,
+});
+// ]TODO(android ISS)
+ 
 export type AccessibilityTrait =
   | 'none'
   | 'button'
@@ -27,7 +36,10 @@ export type AccessibilityTrait =
   | 'startsMedia'
   | 'adjustable'
   | 'allowsDirectInteraction'
-  | 'pageTurn';
+  | 'pageTurn' // [TODO(macOS ISS#2323203)
+  | 'group'
+  | 'list'; // ]TODO(macOS ISS#2323203)
+
 
 export type AccessibilityTraits =
   | AccessibilityTrait
@@ -38,6 +50,10 @@ export type AccessibilityComponentType =
   | 'button'
   | 'radiobutton_checked'
   | 'radiobutton_unchecked';
+
+export type AccessibilityNodeInfoProp = { // [TODO(android ISS)
+  clickable: bool,
+}; // ]TODO(android ISS)
 
 export type AccessibilityRole =
   | 'none'
@@ -77,6 +93,8 @@ module.exports = {
     'adjustable',
     'allowsDirectInteraction',
     'pageTurn',
+    'group', // [TODO(macOS ISS#2323203)
+    'list', // ]TODO(macOS ISS#2323203)
   ],
   AccessibilityComponentTypes: [
     'none',
@@ -84,6 +102,7 @@ module.exports = {
     'radiobutton_checked',
     'radiobutton_unchecked',
   ],
+  AccessibilityNodeInfoPropType, // TODO(android ISS)
   AccessibilityRoles: [
     'none',
     'button',

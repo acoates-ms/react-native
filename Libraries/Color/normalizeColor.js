@@ -11,7 +11,9 @@
 /* eslint no-bitwise: 0 */
 'use strict';
 
-function normalizeColor(color: string | number): ?number {
+const Platform = require('Platform'); // TODO(macOS ISS#2323203)
+
+function normalizeColor(color: ?(string | number | object)): ?number | ?object { // TODO(macOS ISS#2323203)
   const matchers = getMatchers();
   let match;
 
@@ -21,6 +23,22 @@ function normalizeColor(color: string | number): ?number {
     }
     return null;
   }
+
+  if (typeof color === 'object' && Platform.OS === 'macos') { // [TODO(macOS ISS#2323203)
+    if (color.hasOwnProperty('semantic')) {
+      // a macos semantic color
+      return color;
+    } else if (color.hasOwnProperty('dynamic')) {
+      // a dynamic, appearance aware color
+      const dynamicColor = {
+        dynamic: {
+          light: normalizeColor(color.dynamic.light),
+          dark: normalizeColor(color.dynamic.dark)
+        }
+      };
+      return dynamicColor;
+    }
+  } // ]TODO(macOS ISS#2323203)
 
   // Ordered based on occurrences on Facebook codebase
   if ((match = matchers.hex6.exec(color))) {

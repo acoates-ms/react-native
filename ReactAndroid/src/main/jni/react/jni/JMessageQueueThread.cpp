@@ -12,7 +12,7 @@
 #include <folly/Memory.h>
 #include <fb/fbjni.h>
 
-#include <jschelpers/JSCHelpers.h>
+#include <jschelpers/JSException.h>
 
 #include "JNativeRunnable.h"
 

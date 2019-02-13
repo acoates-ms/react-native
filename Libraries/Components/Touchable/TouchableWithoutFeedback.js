@@ -93,6 +93,8 @@ const TouchableWithoutFeedback = ((createReactClass({
       PropTypes.oneOf(AccessibilityTraits),
       PropTypes.arrayOf(PropTypes.oneOf(AccessibilityTraits)),
     ]),
+    onAccessibilityTap: PropTypes.func, // TODO(OSS Candidate ISS#2710739)
+
     /**
      * When `accessible` is true (which is the default) this may be called when
      * the OS-specific concept of "focus" occurs. Some platforms may not have
@@ -109,6 +111,14 @@ const TouchableWithoutFeedback = ((createReactClass({
      * If true, disable all interactions for this component.
      */
     disabled: PropTypes.bool,
+    /**
+     * Called when the mouse enters the touchable element
+     */
+    onMouseEnter: PropTypes.func, // TODO(macOS ISS#2323203)
+    /**
+     * Called when the mouse exits the touchable element
+     */
+    onMouseLeave: PropTypes.func, // TODO(macOS ISS#2323203)
     /**
      * Called when the touch is released, but not if cancelled (e.g. by a scroll
      * that steals the responder lock).
@@ -240,6 +250,9 @@ const TouchableWithoutFeedback = ((createReactClass({
       accessibilityRole: this.props.accessibilityRole,
       accessibilityStates: this.props.accessibilityStates,
       accessibilityTraits: this.props.accessibilityTraits,
+      onAccessibilityTap: this.props.onAccessibilityTap, // TODO(OSS Candidate ISS#2710739)
+      acceptsKeyboardFocus: (this.props.acceptsKeyboardFocus === undefined || this.props.acceptsKeyboardFocus) && !this.props.disabled, // TODO(macOS ISS#2323203)
+      enableFocusRing: (this.props.enableFocusRing === true && !this.props.disabled), // TODO(macOS ISS#2323203)
       nativeID: this.props.nativeID,
       testID: this.props.testID,
       onLayout: this.props.onLayout,
@@ -251,6 +264,14 @@ const TouchableWithoutFeedback = ((createReactClass({
       onResponderMove: this.touchableHandleResponderMove,
       onResponderRelease: this.touchableHandleResponderRelease,
       onResponderTerminate: this.touchableHandleResponderTerminate,
+      clickable: this.props.clickable !== false && this.props.onPress !== undefined, // TODO(android ISS)
+      onClick: this.touchableHandlePress, // TODO(android ISS)
+      onMouseEnter: this.props.onMouseEnter, // [TODO(macOS ISS#2323203)
+      onMouseLeave: this.props.onMouseLeave,
+      onDragEnter: this.props.onDragEnter,
+      onDragLeave: this.props.onDragLeave,
+      onDrop: this.props.onDrop,
+      draggedTypes: this.props.draggedTypes, // ]TODO(macOS ISS#2323203)
       children,
     });
   },

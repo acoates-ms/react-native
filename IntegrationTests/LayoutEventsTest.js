@@ -51,7 +51,7 @@ const LayoutEventsTest = createReactClass({
   },
   animateViewLayout: function() {
     debug('animateViewLayout invoked');
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring, () => {
+    LayoutAnimation.configureNext(Platform.OS === 'macos' ? LayoutAnimation.Presets.easeInEaseOut : LayoutAnimation.Presets.spring, () => {
       debug('animateViewLayout done');
       this.checkLayout(this.addWrapText);
     });

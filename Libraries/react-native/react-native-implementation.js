@@ -194,6 +194,9 @@ const ReactNative = {
   get DatePickerAndroid() {
     return require('DatePickerAndroid');
   },
+  get DatePickerMacOS() { // [TODO(macOS ISS#2323203)
+    return require('DatePickerMacOS');
+  }, // ]TODO(macOS ISS#2323203)
   get DeviceInfo() {
     return require('DeviceInfo');
   },

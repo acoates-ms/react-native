@@ -20,6 +20,7 @@ const ViewStylePropTypes = require('ViewStylePropTypes');
 const {
   AccessibilityComponentTypes,
   AccessibilityTraits,
+  AccessibilityNodeInfoPropType, // TODO(android ISS)
   AccessibilityRoles,
   AccessibilityStates,
 } = require('ViewAccessibility');
@@ -27,6 +28,7 @@ const {
 import type {
   AccessibilityComponentType,
   AccessibilityTrait,
+  AccessibilityNodeInfoProp, // TODO(android ISS)
   AccessibilityRole,
   AccessibilityState,
 } from 'ViewAccessibility';
@@ -36,12 +38,18 @@ import type {Layout, LayoutEvent} from 'CoreEventTypes';
 
 const stylePropType = StyleSheetPropType(ViewStylePropTypes);
 
+const DraggedTypes = [ // [TODO(macOS ISS#2323203)
+  'fileUrl',
+]; // ]TODO(macOS ISS#2323203)
+
 export type ViewLayout = Layout;
 export type ViewLayoutEvent = LayoutEvent;
 
 type DirectEventProps = $ReadOnly<{|
   onAccessibilityAction?: Function,
   onAccessibilityTap?: Function,
+  onDoubleClick?: ?Function, // TODO(macOS ISS#2323203)
+  onKeyDown?: ?Function, // TODO(macOS ISS#2323203)
   onLayout?: ?(event: LayoutEvent) => void,
   onMagicTap?: Function,
 |}>;
@@ -118,6 +126,8 @@ export type ViewProps = $ReadOnly<{|
   children?: ?React.Node,
   testID?: ?string,
   nativeID?: string,
+  onDoubleClick?: ?Function, // TODO(macOS ISS#2323203)
+  onKeyDown?: ?Function, // TODO(macOS ISS#2323203)
   hitSlop?: ?EdgeInsetsProp,
   pointerEvents?: null | 'box-none' | 'none' | 'box-only' | 'auto',
   style?: stylePropType,
@@ -126,6 +136,18 @@ export type ViewProps = $ReadOnly<{|
   shouldRasterizeIOS?: boolean,
   collapsable?: boolean,
   needsOffscreenAlphaCompositing?: boolean,
+  clickable?: bool, // TODO(android ISS)
+  onClick?: Function, // TODO(android ISS)
+  onMouseEnter: Function, // [TODO(macOS ISS#2323203)
+  onMouseLeave: Function,
+  onDragEnter: Function,
+  onDragLeave: Function,
+  onDrop: Function, // ]TODO(macOS ISS#2323203)
+  onFocusChange?: Function, // TODO(android ISS)
+  acceptsKeyboardFocus?: bool, // [TODO(macOS ISS#2323203)
+  enableFocusRing?: bool,
+  draggedTypes: DraggedTypes | Array<DraggedTypes>, // ]TODO(macOS ISS#2323203)
+  accessibilityNodeInfo?: AccessibilityNodeInfoProp, // TODO(android ISS)
 |}>;
 
 module.exports = {
@@ -162,6 +184,12 @@ module.exports = {
    * @platform ios
    */
   accessibilityActions: PropTypes.arrayOf(PropTypes.string),
+
+  /**
+   * Sets the hint text that's read by the screen reader when the user interacts
+   * with the element.
+   */
+  accessibilityHint: PropTypes.node, // TODO(OSS Candidate ISS#2710739)
 
   /**
    * Prevents view from being inverted if set to true and color inversion is turned on.
@@ -216,6 +244,20 @@ module.exports = {
   ]),
 
   /**
+   * Provides privilege to overrides accessibilityNodeInfo properties to be delivered to accessibility 
+   * service. Works for Android only.
+   * 
+   * Currently supported properties:
+   *  - clickable : bool
+   * 
+   * See the [Android `AccessibilityNodeInfo` docs](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo.html)
+   * for reference.
+   * 
+   * @platform android
+   */
+  accessibilityNodeInfo: AccessibilityNodeInfoPropType, // TODO(android ISS)
+
+  /**
    * Provides additional traits to screen reader. By default no traits are
    * provided unless specified otherwise in element.
    *
@@ -258,6 +300,8 @@ module.exports = {
    * @platform ios
    */
   onAccessibilityAction: PropTypes.func,
+  
+  onDoubleClick: PropTypes.func, // TODO(macOS ISS#2323203)
 
   /**
    * When `accessible` is true, the system will try to invoke this function
@@ -498,6 +542,89 @@ module.exports = {
    * See http://facebook.github.io/react-native/docs/view.html#needsoffscreenalphacompositing
    */
   needsOffscreenAlphaCompositing: PropTypes.bool,
+
+  /**
+   * When `true`, indicates that the view is clickable. By default,
+   * all the touchable elements are clickable.
+   * 
+   * @platform android
+   */
+  clickable: PropTypes.bool, // TODO(android ISS)
+  
+  /**
+   * When `clickable` is true, the system will try to invoke this function
+   * when the user performs a click.
+   * 
+   * @platform android
+   */
+  onClick: PropTypes.func, // TODO(android ISS)
+
+  /**
+   * Fired when a pointing device is moved over the view
+   * 
+   * @platform macos
+   */
+  onMouseEnter: PropTypes.func, // TODO(macOS ISS#2323203)
+  
+  /**
+   * Fired when a pointing device is moved out the view
+   * 
+   * @platform macos
+   */
+  onMouseLeave: PropTypes.func, // TODO(macOS ISS#2323203)
+  
+  /**
+   * Fired when a dragged element enters a valid drop target
+   * 
+   * @platform macos
+   */
+  onDragEnter: PropTypes.func, // TODO(macOS ISS#2323203)
+  
+  /**
+   * Fired when a dragged element leaves a valid drop target
+   * 
+   * @platform macos
+   */
+  onDragLeave: PropTypes.func, // TODO(macOS ISS#2323203)
+
+  /**
+   * Fired when an element is dropped on a valid drop target
+   * 
+   * @platform macos
+   */
+  onDrop: PropTypes.func, // TODO(macOS ISS#2323203)
+  
+  /**
+  * Specifies whether the view participates in the key view loop as user tabs
+  * through different controls.
+  */
+  acceptsKeyboardFocus: PropTypes.bool, // TODO(macOS ISS#2323203)
+
+  /**
+  * Specifies whether focus ring should be drawn when the view has the first responder status.
+  */
+  enableFocusRing: PropTypes.bool, // TODO(macOS ISS#2323203)
+
+  /**
+   * fired when the view focus changes (gain->lose or lose->gain)
+   * 
+   * @platform android
+   */
+  onFocusChange: PropTypes.func, // TODO(android ISS)
+
+  /**
+   * Enables Dran'n'Drop Support for certain types of dragged types
+   *
+   * Possible values for `draggedTypes` are:
+   * 
+   * - `'fileUrl'`
+   * 
+   * @platform macos
+   */
+  draggedTypes: PropTypes.oneOfType([ // TODO(macOS ISS#2323203)
+    PropTypes.oneOf(DraggedTypes),
+    PropTypes.arrayOf(PropTypes.oneOf(DraggedTypes)),
+  ]),
 
   /**
    * Any additional platform-specific view prop types, or prop type overrides.

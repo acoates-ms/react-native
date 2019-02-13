@@ -1,0 +1,131 @@
+{
+  "name": "@microsoft/react-native",
+  "entries": [
+    {
+      "version": "0.0.11",
+      "tag": "@microsoft/react-native_v0.0.11",
+      "date": "Tue, 12 Feb 2019 04:48:46 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Adding dir java back to DIRS, which got removed accidently during RN57 upgrade",
+            "author": "Rohit Jain (MOD) <rojain@microsoft.com>",
+            "commit": "63be792ea2358b3893b8f02f9385bb4f10c6a693"
+          }
+        ]
+      }
+    },
+    {
+      "version": "0.0.10",
+      "tag": "@microsoft/react-native_v0.0.10",
+      "date": "Tue, 12 Feb 2019 03:23:21 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Publish RNTester js files for other platforms to share",
+            "author": "Andrew Coates (REDMOND) <acoates@microsoft.com>",
+            "commit": "da2a7b70785cb949e6a0397391330040c20d7565"
+          }
+        ]
+      }
+    },
+    {
+      "version": "0.0.9",
+      "tag": "@microsoft/react-native_v0.0.9",
+      "date": "Tue, 12 Feb 2019 02:09:17 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Title\t[react-native] Fixed Multiline TextInput insertion point color on macOS",
+            "author": "Tom Underhill <tomun@microsoft.com>",
+            "commit": "0992c854c50204c2a73bef01fded793b5e603aff"
+          }
+        ]
+      }
+    },
+    {
+      "version": "0.0.8",
+      "tag": "@microsoft/react-native_v0.0.8",
+      "date": "Sat, 09 Feb 2019 08:08:19 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Fixing a mem leak and a crash",
+            "author": "Rohit Jain (MOD) <rojain@microsoft.com>",
+            "commit": "a94560f69267ae6b5b06c3d070132395dfb69425"
+          }
+        ]
+      }
+    },
+    {
+      "version": "0.0.7",
+      "tag": "@microsoft/react-native_v0.0.7",
+      "date": "Thu, 07 Feb 2019 20:51:49 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Make facebook::react::Instance methods overridable",
+            "author": "Julio Cesar Rocha <jurocha@microsoft.com>",
+            "commit": "30815899c8fd50776afe0ba81ba4c4a9755af877"
+          }
+        ]
+      }
+    },
+    {
+      "version": "0.0.6",
+      "tag": "@microsoft/react-native_v0.0.6",
+      "date": "Thu, 07 Feb 2019 15:45:23 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "OACR fixes",
+            "author": "Andrew Coates (REDMOND) <acoates@microsoft.com>",
+            "commit": "27e4dc618a130737817ba27361259f14a6cb4a13"
+          }
+        ]
+      }
+    },
+    {
+      "version": "0.0.5",
+      "tag": "@microsoft/react-native_v0.0.5",
+      "date": "Wed, 06 Feb 2019 22:26:22 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Prefix readme with reason for fork",
+            "author": "Andrew Coates (REDMOND) <acoates@microsoft.com>",
+            "commit": "416f1a81551709e6886632af68cf4facd911eea4"
+          }
+        ]
+      }
+    },
+    {
+      "version": "0.0.4",
+      "tag": "@microsoft/react-native_v0.0.4",
+      "date": "Wed, 06 Feb 2019 02:28:06 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Support pnpm",
+            "author": "Andrew Coates (REDMOND) <acoates@microsoft.com>",
+            "commit": "1170eff0e47fb3980b375f9d0380b7f78e9fe79d"
+          }
+        ]
+      }
+    },
+    {
+      "version": "0.0.3",
+      "tag": "@microsoft/react-native_v0.0.3",
+      "date": "Tue, 05 Feb 2019 06:23:13 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Rename @offce-iss/react-native to @microsoft/react-native",
+            "author": "Andrew Coates (REDMOND) <acoates@microsoft.com>",
+            "commit": "a7ea3733408eee4db88a1a1a7a7b0c6c89654c56"
+          }
+        ]
+      }
+    }
+  ]
+}

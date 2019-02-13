@@ -1,0 +1,25 @@
+LIBLET_ANDROID = 1
+
+!include ..\sources.inc
+
+TARGETNAME = v8helpers
+
+INCLUDES = $(INCLUDES); \
+    $(PKGJAVASCRIPTCORE_TEMP)\build\native\include; \
+    $(OPENSOURCE_REACTNATIVE)\OfficeISS\v8\v8-headers\include; \
+
+SOURCES = $(SOURCES_ANDROID)
+
+LOCAL_CFLAGS = $(LOCAL_CFLAGS) -Wall -Werror -fexceptions -frtti
+LOCAL_CFLAGS = $(LOCAL_CFLAGS) -DLOG_TAG=\"ReactNative\" -Wno-c++11-compat
+LOCAL_CFLAGS = $(LOCAL_CFLAGS) -Wno-unused-function -Wno-unused-lambda-capture
+LOCAL_CFLAGS = $(LOCAL_CFLAGS) -Wno-header-hygiene -Wno-tautological-compare
+LOCAL_CFLAGS = $(LOCAL_CFLAGS) -Wno-unused-variable
+LOCAL_CFLAGS = $(LOCAL_CFLAGS) -Wno-shadow $(CXX11_FLAGS)
+
+LOCAL_LDLIBS = \
+    $(LOCAL_LDLIBS) \
+    $(OPENSOURCE_REACTNATIVETARGETDIR)\libfolly_json.so \
+    $(PKGREACTNATIVEANDROIDRIR_BIN)\x-none\libv8.cr.so \
+    $(PKGREACTNATIVEANDROIDRIR_BIN)\x-none\libv8_libbase.cr.so \
+    $(PKGREACTNATIVEANDROIDRIR_BIN)\x-none\libv8_libplatform.cr.so \
