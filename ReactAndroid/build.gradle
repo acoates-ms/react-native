@@ -16,15 +16,27 @@ import org.apache.tools.ant.filters.ReplaceTokens
 // We then copy both the downloaded code and our custom makefiles and headers into third-party-ndk.
 // After that we build native code from src/main/jni with module path pointing at third-party-ndk.
 
+
+def customDownloadsDir = System.getenv("REACT_NATIVE_DOWNLOADS_DIR")
+def downloadsDir = customDownloadsDir ? new File(customDownloadsDir) : new File("$buildDir/downloads")
 def thirdPartyNdkDir = new File("$buildDir/third-party-ndk")
 
 // You need to have following folders in this directory:
-//   - boost
-//   - double-conversion
-//   - folly
-//   - glog
+//   - boost_1_63_0
+//   - double-conversion-1.1.6
+//   - folly-deprecate-dynamic-initializer
+//   - glog-0.3.5
+//   - jsc-headers
 
-def BoostPath = 'packages/boost.1.68.0.0/lib/native/include'
+def dependenciesPath = System.getenv("REACT_NATIVE_DEPENDENCIES")
+
+// The Boost library is a very large download (>100MB).
+// If Boost is already present on your system, define the REACT_NATIVE_BOOST_PATH env variable
+// and the build will use that.
+def boostPath = dependenciesPath ?: System.getenv("REACT_NATIVE_BOOST_PATH") ?: 'packages/boost.1.68.0.0/lib/native/include'
+
+
+def BoostNugetPath = 'packages/boost.1.68.0.0/lib/native/include'
 def DoubleConversionPath = '../double-conversion'
 def FollyPath = '..'
 def GlogPath = '..'
@@ -40,6 +52,14 @@ def isV8Enabled() {
     return true;
 }
 
+// In sdx-platform we use the nuget cache.  For GitHub CI - we use this task
+task downloadBoost(dependsOn: createNativeDepsDirectories, type: Download) {
+    src 'https://github.com/react-native-community/boost-for-react-native/releases/download/v1.63.0-0/boost_1_63_0.tar.gz'
+    onlyIfNewer true
+    overwrite false
+    dest new File(downloadsDir, 'boost_1_63_0.tar.gz')
+}
+
 task prepareV8(dependsOn: createNativeDepsDirectories, type:Copy) {
     from V8Path
     include 'v8/armeabi-v7a/*.*'
@@ -52,7 +72,7 @@ task prepareV8(dependsOn: createNativeDepsDirectories, type:Copy) {
 }
 
 task prepareBoost(dependsOn: createNativeDepsDirectories, type: Copy) {
-    from BoostPath
+    from file(BoostNugetPath).exist() ? BoostNugetPath : tarTree(resources.gzip(downloadBoost.dest))
     from 'src/main/jni/third-party/boost/Android.mk'
     include 'Android.mk', 'boost/**/*.hpp'
     includeEmptyDirs = false
