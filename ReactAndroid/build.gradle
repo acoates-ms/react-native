@@ -75,7 +75,7 @@ task prepareV8(dependsOn: createNativeDepsDirectories, type:Copy) {
 }
 
 task prepareBoost(dependsOn: createNativeDepsDirectories, type: Copy) {
-    from file(BoostNugetPath).exist() ? BoostNugetPath : tarTree(resources.gzip(downloadBoost.dest))
+    from file(BoostNugetPath).exists() ? BoostNugetPath : tarTree(resources.gzip(downloadBoost.dest))
     from 'src/main/jni/third-party/boost/Android.mk'
     include 'Android.mk', 'boost/**/*.hpp'
     includeEmptyDirs = false
