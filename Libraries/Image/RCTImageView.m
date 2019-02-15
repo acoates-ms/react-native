@@ -527,10 +527,16 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)coder)
 #endif
     CGSize idealSize = RCTTargetSize(imageSize, imageScale, frame.size, windowScale,
                                      resizeMode, YES); // ]TODO(macOS ISS#2323203)
-
     // Don't reload if the current image or target image size is close enough
-    if (!RCTShouldReloadImageForSizeChange(imageSize, idealSize) ||
-        !RCTShouldReloadImageForSizeChange(_targetSize, idealSize)) {
+    if ((!RCTShouldReloadImageForSizeChange(imageSize, idealSize) ||
+         !RCTShouldReloadImageForSizeChange(_targetSize, idealSize)) // [TODO(macOS ISS#2323203)
+#if !TARGET_OS_OSX
+         // Since mac doen't suport UIViewContentModeScaleAspectFill, we have to manually resample the image
+         // If we're in cover mode we need to ensure that the image is re-sampled to the correct size when the container size (shrinking 
+         // being the most obvious case) otherwise we will end up in a state an image will not properly scale inside its container
+         && (resizeMode != RCTResizeModeCover || (imageSize.width == idealSize.width && imageSize.height == idealSize.height))
+#endif
+         ) { // ]TODO(macOS ISS#2323203)
       return;
     }
 

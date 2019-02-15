@@ -46,7 +46,7 @@ namespace facebook { namespace v8runtime {
     }
 
     bool ShouldSetNoLazyFlag(const folly::dynamic& v8Config) {
-      return !v8Config.isNull() && v8Config.getDefault("UseLazyScriptCompilation", false).getBool();
+      return !v8Config.isNull() && !v8Config.getDefault("UseLazyScriptCompilation", false).getBool();
     }
 
     // Extracts a C string from a V8 Utf8Value.
@@ -111,7 +111,9 @@ namespace facebook { namespace v8runtime {
 
   void V8Runtime::PersistCachedData(std::unique_ptr<v8::ScriptCompiler::CachedData> cachedData, const std::string& path) {
     if (!cachedData) {
-      react::ReactMarker::logMarker(react::ReactMarker::BYTECODE_CREATION_FAILED);
+      if (react::ReactMarker::logTaggedMarker) {
+        react::ReactMarker::logMarker(react::ReactMarker::BYTECODE_CREATION_FAILED);
+      }
       return;
     }
 
@@ -119,12 +121,15 @@ namespace facebook { namespace v8runtime {
     bool result = facebook::react::FileUtils::WriteBinary(path, cachedData->data, length);
 
     if (!result) {
-      react::ReactMarker::logMarker(react::ReactMarker::BYTECODE_WRITE_FAILED);
+      if (react::ReactMarker::logTaggedMarker) {
+        react::ReactMarker::logMarker(react::ReactMarker::BYTECODE_WRITE_FAILED);
+      }
     }
   }
 
   v8::Local<v8::Script> V8Runtime::GetCompiledScriptFromCache(const v8::Local<v8::String> &sourceString, const std::string& sourceURL) {
-    std::string cacheFilePath = cacheDirectory_ + std::string("/") + sourceURL + ".v8cache";
+    std::size_t found = sourceURL.find_last_of("/");
+    std::string cacheFilePath = cacheDirectory_ + std::string("/") + sourceURL.substr(found + 1) + ".v8cache";
     auto cacheData = TryLoadCachedData(cacheFilePath);
 
     // No need to delete cacheData as ScriptCompiler::Source will take its ownership.

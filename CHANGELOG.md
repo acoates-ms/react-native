@@ -1,6 +1,52 @@
 # Change Log - @microsoft/react-native
 
-This log was last generated on Tue, 12 Feb 2019 04:48:46 GMT and should not be manually modified.
+This log was last generated on Fri, 15 Feb 2019 14:47:26 GMT and should not be manually modified.
+
+## 0.2.1
+Fri, 15 Feb 2019 14:47:26 GMT
+
+### Patches
+
+- Misc changes to get JSI work in Rex
+
+## 0.2.0
+Thu, 14 Feb 2019 23:44:35 GMT
+
+### Minor changes
+
+- Add onFocus support to Apple platforms
+
+## 0.1.2
+Thu, 14 Feb 2019 22:36:25 GMT
+
+### Patches
+
+- Working to fix circle ci tests
+
+## 0.1.1
+Thu, 14 Feb 2019 21:21:35 GMT
+
+### Patches
+
+- Wire up scrollEnabled ScrollView prop on MacOS
+
+## 0.1.0
+Wed, 13 Feb 2019 23:20:08 GMT
+
+### Minor changes
+
+- Add tooltip support to MacOS React Native
+
+### Patches
+
+- [MacOS] Ensure an image in 'cover' mode behaves appropriately when it's container resizes
+
+## 0.0.12
+Wed, 13 Feb 2019 20:29:55 GMT
+
+### Patches
+
+- [react-native] Change RCTDevSettings to access dataSource through its property getter instead of ivar
 
 ## 0.0.11
 Tue, 12 Feb 2019 04:48:46 GMT

@@ -171,6 +171,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)init)
 @property (nonatomic, assign) BOOL pinchGestureEnabled;
 #endif
 #if TARGET_OS_OSX // [TODO(macOS ISS#2323203)
++ (BOOL)isCompatibleWithResponsiveScrolling;
 @property (nonatomic, assign, getter=isScrollEnabled) BOOL scrollEnabled;
 @property (nonatomic, strong) NSPanGestureRecognizer *panGestureRecognizer;
 #endif // ]TODO(macOS ISS#2323203)
@@ -183,6 +184,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)init)
 {
   if ((self = [super initWithFrame:frame])) {
 #if TARGET_OS_OSX // [TODO(macOS ISS#2323203)
+    self.scrollEnabled = YES;
     self.panGestureRecognizer = [[NSPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleCustomPan:)];
 #else // ]TODO(macOS ISS#2323203)
     [self.panGestureRecognizer addTarget:self action:@selector(handleCustomPan:)];
@@ -226,6 +228,22 @@ RCT_NOT_IMPLEMENTED(- (instancetype)init)
   }
   return NO;
 }
+
+#if TARGET_OS_OSX // [TODO(macOS ISS#2323203)
++ (BOOL)isCompatibleWithResponsiveScrolling
+{
+  return YES;
+}
+
+- (void)scrollWheel:(NSEvent *)theEvent
+{
+  if (!self.scrollEnabled) {
+    [[self nextResponder] scrollWheel:theEvent];
+    return;
+  }
+  [super scrollWheel:theEvent];
+}
+#endif // ]TODO(macOS ISS#2323203)
 
 - (void)handleCustomPan:(__unused UIGestureRecognizer *)sender // TODO(macOS ISS#2323203)
 {

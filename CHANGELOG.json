@@ -2,6 +2,97 @@
   "name": "@microsoft/react-native",
   "entries": [
     {
+      "version": "0.2.1",
+      "tag": "@microsoft/react-native_v0.2.1",
+      "date": "Fri, 15 Feb 2019 14:47:26 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Misc changes to get JSI work in Rex",
+            "author": "Rohit Jain (MOD) <rojain@microsoft.com>",
+            "commit": "942156ef01f617754225a17af21ebcfddd76d6bf"
+          }
+        ]
+      }
+    },
+    {
+      "version": "0.2.0",
+      "tag": "@microsoft/react-native_v0.2.0",
+      "date": "Thu, 14 Feb 2019 23:44:35 GMT",
+      "comments": {
+        "minor": [
+          {
+            "comment": "Add onFocus support to Apple platforms",
+            "author": "Brent Erickson <brericks@microsoft.com>",
+            "commit": "c441bf7c817335d2df3224861342b58248840f96"
+          }
+        ]
+      }
+    },
+    {
+      "version": "0.1.2",
+      "tag": "@microsoft/react-native_v0.1.2",
+      "date": "Thu, 14 Feb 2019 22:36:25 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Working to fix circle ci tests",
+            "author": "Andrew Coates (REDMOND) <acoates@microsoft.com>",
+            "commit": "b31f2b362848b68228954f607fa3f3936e0142ef"
+          }
+        ]
+      }
+    },
+    {
+      "version": "0.1.1",
+      "tag": "@microsoft/react-native_v0.1.1",
+      "date": "Thu, 14 Feb 2019 21:21:35 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Wire up scrollEnabled ScrollView prop on MacOS",
+            "author": "Brent Erickson <brericks@microsoft.com>",
+            "commit": "b416495c4fb8110771c69165a7f8d3159c50441c"
+          }
+        ]
+      }
+    },
+    {
+      "version": "0.1.0",
+      "tag": "@microsoft/react-native_v0.1.0",
+      "date": "Wed, 13 Feb 2019 23:20:08 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "[MacOS] Ensure an image in 'cover' mode behaves appropriately when it's container resizes",
+            "author": "Brent Erickson <brericks@microsoft.com>",
+            "commit": "dfc3768888cca621bec0d3c9504b0ed3ffbfbd4e"
+          }
+        ],
+        "minor": [
+          {
+            "comment": "Add tooltip support to MacOS React Native",
+            "author": "Brent Erickson <brericks@microsoft.com>",
+            "commit": "f6249a25f03c41e22a8bb054f0563b33882a6d1c"
+          }
+        ]
+      }
+    },
+    {
+      "version": "0.0.12",
+      "tag": "@microsoft/react-native_v0.0.12",
+      "date": "Wed, 13 Feb 2019 20:29:55 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "[react-native] Change RCTDevSettings to access dataSource through its property getter instead of ivar",
+            "author": "Tom Underhill <tomun@microsoft.com>",
+            "commit": "d9215afdf7a9dd235d47e84ff6e8dc8f036e9ff5"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.0.11",
       "tag": "@microsoft/react-native_v0.0.11",
       "date": "Tue, 12 Feb 2019 04:48:46 GMT",

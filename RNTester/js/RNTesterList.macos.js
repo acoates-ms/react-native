@@ -43,6 +43,11 @@ const ComponentExamples: Array<RNTesterExample> = [
     supportsTVOS: false,
   },
   {
+    key: 'FocusEvents',
+    module: require('./FocusEventsExample'),
+    supportsTVOS: true,
+  },
+  {
     key: 'ImageExample',
     module: require('./ImageExample'),
     supportsTVOS: false,

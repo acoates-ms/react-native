@@ -73,7 +73,7 @@ task prepareV8(dependsOn: createNativeDepsDirectories, type:Copy) {
     includeEmptyDirs = false
     into "src/main/jni/v8/jni/"
 }
- 
+
 task prepareBoost(dependsOn: createNativeDepsDirectories, type: Copy) {
     from BoostNugetPath
     from tarTree(resources.gzip(downloadBoost.dest))

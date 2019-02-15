@@ -17,6 +17,11 @@
 
 @interface RCTView : UIView
 
+// [TODO(OSS Candidate ISS#2710739)
+- (BOOL)becomeFirstResponder;
+- (BOOL)resignFirstResponder;
+// ]TODO(OSS Candidate ISS#2710739)
+
 /**
  * Accessibility event handlers
  */
@@ -128,5 +133,11 @@
 @property (nonatomic, copy) RCTDirectEventBlock onDragLeave;
 @property (nonatomic, copy) RCTDirectEventBlock onDrop;
 #endif // ]TODO(macOS ISS#2323203)
+
+/**
+ * Common Focus Properties
+ */
+@property (nonatomic, copy) RCTBubblingEventBlock onFocus;
+@property (nonatomic, copy) RCTBubblingEventBlock onBlur;
 
 @end

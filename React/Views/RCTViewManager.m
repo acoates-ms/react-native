@@ -297,6 +297,8 @@ RCT_CUSTOM_VIEW_PROPERTY(enableFocusRing, BOOL, RCTView)
   }
 }
 
+RCT_REMAP_VIEW_PROPERTY(tooltip, toolTip, NSString)
+
 RCT_CUSTOM_VIEW_PROPERTY(draggedTypes, NSArray<NSPasteboardType>*, RCTView)
 {
   NSArray<NSPasteboardType> *currentTypes = view.registeredDraggedTypes;
@@ -349,6 +351,12 @@ RCT_VIEW_BORDER_RADIUS_PROPERTY(BottomEnd)
 
 RCT_REMAP_VIEW_PROPERTY(display, reactDisplay, YGDisplay)
 RCT_REMAP_VIEW_PROPERTY(zIndex, reactZIndex, NSInteger)
+
+// [TODO(OSS Candidate ISS#2710739)
+RCT_EXPORT_VIEW_PROPERTY(onFocus, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onBlur, RCTBubblingEventBlock)
+// ]TODO(OSS Candidate ISS#2710739)
+
 
 #if TARGET_OS_OSX // TODO(macOS ISS#2323203)
 #pragma mark - macOS properties

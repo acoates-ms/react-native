@@ -283,8 +283,8 @@ namespace facebook { namespace v8runtime {
       v8::Local<v8::Value> stack_trace_string;
       if (try_catch->StackTrace(context).ToLocal(&stack_trace_string) && stack_trace_string->IsString() && v8::Local<v8::String>::Cast(stack_trace_string)->Length() > 0) {
         v8::String::Utf8Value stack_trace(isolate, stack_trace_string);
-        const char* stack_trace_string = ToCString(stack_trace);
-        sstr << stack_trace_string << std::endl;
+        const char* stack_trace_string2 = ToCString(stack_trace);
+        sstr << stack_trace_string2 << std::endl;
       }
 
       throw jsi::JSError(*this, sstr.str());

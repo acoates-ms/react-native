@@ -563,6 +563,33 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:unused)
   }
 }
 
+// [TODO(OSS Candidate ISS#2710739)
+- (BOOL)becomeFirstResponder
+{
+  if (![super becomeFirstResponder]) {
+    return NO;
+  }
+
+  // If we've gained focus, notify listeners
+  if (self.onFocus != nil ) {
+    self.onFocus(nil);
+  }
+  return YES;
+}
+- (BOOL)resignFirstResponder
+{
+  if (![super resignFirstResponder]) {
+    return NO;
+  }
+
+  // If we've gained focus, notify listeners
+  if (self.onBlur != nil ) {
+    self.onBlur(nil);
+  }
+  return YES;
+}
+// ]TODO(OSS Candidate ISS#2710739)
+
 #pragma mark - Borders
 
 - (UIColor *)backgroundColor

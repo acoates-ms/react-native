@@ -88,7 +88,7 @@ public:
   virtual const ModuleRegistry &getModuleRegistry() const;
   virtual ModuleRegistry &getModuleRegistry();
 
-  void handleMemoryPressure(int pressureLevel);
+  virtual void handleMemoryPressure(int pressureLevel);
 
    /**
    * Returns the current peak memory usage due to the JavaScript

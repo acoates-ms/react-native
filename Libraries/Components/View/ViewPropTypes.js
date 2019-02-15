@@ -136,16 +136,19 @@ export type ViewProps = $ReadOnly<{|
   shouldRasterizeIOS?: boolean,
   collapsable?: boolean,
   needsOffscreenAlphaCompositing?: boolean,
-  clickable?: bool, // TODO(android ISS)
-  onClick?: Function, // TODO(android ISS)
+  clickable?: bool, // [TODO(android ISS)
+  onClick ?: Function,
+  onFocusChange?: Function, // ]TODO(android ISS)
   onMouseEnter: Function, // [TODO(macOS ISS#2323203)
   onMouseLeave: Function,
   onDragEnter: Function,
   onDragLeave: Function,
-  onDrop: Function, // ]TODO(macOS ISS#2323203)
-  onFocusChange?: Function, // TODO(android ISS)
-  acceptsKeyboardFocus?: bool, // [TODO(macOS ISS#2323203)
+  onDrop: Function,
+  onFocus?: Function,
+  onBlur?: Function,
+  acceptsKeyboardFocus?: bool,
   enableFocusRing?: bool,
+  tooltip?: string,
   draggedTypes: DraggedTypes | Array<DraggedTypes>, // ]TODO(macOS ISS#2323203)
   accessibilityNodeInfo?: AccessibilityNodeInfoProp, // TODO(android ISS)
 |}>;
@@ -595,6 +598,12 @@ module.exports = {
   onDrop: PropTypes.func, // TODO(macOS ISS#2323203)
   
   /**
+  * Specifies the Tooltip for the view
+  * @platform macos
+  */
+  tooltip: PropTypes.string, // TODO(macOS ISS#2323203)
+
+  /**
   * Specifies whether the view participates in the key view loop as user tabs
   * through different controls.
   */
@@ -611,6 +620,22 @@ module.exports = {
    * @platform android
    */
   onFocusChange: PropTypes.func, // TODO(android ISS)
+
+  /**
+   * Fired when an element is focused
+   *
+   * @platform macos
+   * @platform ios
+   */
+  onFocus: PropTypes.func, // TODO(macOS ISS#2323203)
+
+  /**
+   * Fired when an element loses focus
+   *
+   * @platform macos
+   * @platform ios
+   */
+  onBlur: PropTypes.func, // TODO(macOS ISS#2323203)
 
   /**
    * Enables Dran'n'Drop Support for certain types of dragged types
