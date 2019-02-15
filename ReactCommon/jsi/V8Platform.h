@@ -10,7 +10,7 @@
 #include <condition_variable>
 #include <cstdlib>
 
-#include <jsi\V8Runtime.h>
+#include <jsi/V8Runtime.h>
 
 namespace facebook {
 namespace v8runtime {
