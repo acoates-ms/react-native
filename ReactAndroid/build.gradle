@@ -55,7 +55,7 @@ def isV8Enabled() {
     return true;
 }
 
-// In sdx-platform we use the nuget cache.  For GitHub CI - we use this task
+// For GitHub CI - we use this task
 task downloadBoost(dependsOn: createNativeDepsDirectories, type: Download) {
     src 'https://github.com/react-native-community/boost-for-react-native/releases/download/v1.63.0-0/boost_1_63_0.tar.gz'
     onlyIfNewer true
@@ -73,13 +73,25 @@ task prepareV8(dependsOn: createNativeDepsDirectories, type:Copy) {
     includeEmptyDirs = false
     into "src/main/jni/v8/jni/"
 }
-
+ 
 task prepareBoost(dependsOn: createNativeDepsDirectories, type: Copy) {
-    from file(BoostNugetPath).exists() ? BoostNugetPath : tarTree(resources.gzip(downloadBoost.dest))
+    from BoostNugetPath
+    from tarTree(resources.gzip(downloadBoost.dest))
     from 'src/main/jni/third-party/boost/Android.mk'
-    include 'Android.mk', 'boost/**/*.hpp'
+    include 'Android.mk', 'boost_1_63_0/boost/**/*.hpp', 'boost/boost/**/*.hpp'
     includeEmptyDirs = false
-    into "$thirdPartyNdkDir/boost"
+    into "$thirdPartyNdkDir/boost_tmp"
+    doLast {
+        if (file("$thirdPartyNdkDir/boost_tmp/boost_1_63_0").exists()) {
+          file("$thirdPartyNdkDir/boost_tmp/boost_1_63_0").renameTo("$thirdPartyNdkDir/boost")
+        }
+        if (file("$thirdPartyNdkDir/boost_tmp/boost").exists()) {
+          file("$thirdPartyNdkDir/boost_tmp").renameTo("$thirdPartyNdkDir/boost")
+        }
+        if (file("$thirdPartyNdkDir/boost_tmp/Android.mk").exists()) {
+          file("$thirdPartyNdkDir/boost_tmp/Android.mk").renameTo("$thirdPartyNdkDir/boost/Android.mk")
+        }
+    }
 }
 
 task prepareDoubleConversion(dependsOn: createNativeDepsDirectories, type: Copy) {
