@@ -37,20 +37,10 @@ jobs:
             Get-NetTCPConnection -LocalPort 8081 -ErrorAction Ignore | ForEach-Object { Stop-Process $_.OwningProcess -ErrorAction Ignore }
             Get-NetTCPConnection -LocalPort 5555 -ErrorAction Ignore | ForEach-Object { Stop-Process $_.OwningProcess -ErrorAction Ignore }
 
-      # - task: CmdLine@2
-      #   displayName: Rush install
-      #   inputs:
-      #     script: node common/scripts/install-run-rush.js install
-
       - task: CmdLine@2
         displayName: npm install
         inputs:
           script: npm install
-
-      # - task: CmdLine@2
-      #   displayName: Set up cmake and gradle environment
-      #   inputs:
-      #     script: make setup droid
 
       - task: NuGetCommand@2
         displayName: NuGet restore
@@ -100,32 +90,6 @@ jobs:
         inputs:
           script: node .\local-cli\cli.js bundle --entry-file .\RNTester\js\RNTesterApp.android.js --bundle-output RNTesterApp.android.bundle --platform android
 
-      # - task: Gradle@1
-      #   displayName: gradlew clean
-      #   inputs:
-      #     gradleWrapperFile: gradlew
-      #     # workingDirectory: src\
-      #     #options: # Optional
-      #     tasks: clean
-      #     publishJUnitResults: false
-      #     #testResultsFiles: '**/build/test-results/TEST-*.xml'
-      #     #testRunTitle: # Optional
-      #     #codeCoverageToolOption: 'None' # Optional. Options: none, cobertura, jaCoCo
-      #     #codeCoverageClassFilesDirectories: 'build/classes/main/' # Required when codeCoverageToolOption == False
-      #     #codeCoverageClassFilter: # Optional
-      #     #codeCoverageFailIfEmpty: false # Optional
-      #     #javaHomeOption: 'JDKVersion' # Options: jDKVersion, path
-      #     #jdkVersionOption: 'default' # Optional. Options: default, 1.11, 1.10, 1.9, 1.8, 1.7, 1.6
-      #     #jdkDirectory: # Required when javaHomeOption == Path
-      #     #jdkArchitectureOption: 'x64' # Optional. Options: x86, x64
-      #     #gradleOptions: '-Xmx1024m' # Optional
-      #     #sonarQubeRunAnalysis: false
-      #     #sqGradlePluginVersionChoice: 'specify' # Required when sonarQubeRunAnalysis == True# Options: specify, build
-      #     #sonarQubeGradlePluginVersion: '2.6.1' # Required when sonarQubeRunAnalysis == True && SqGradlePluginVersionChoice == Specify
-      #     #checkStyleRunAnalysis: false # Optional
-      #     #findBugsRunAnalysis: false # Optional
-      #     #pmdRunAnalysis: false # Optional
-
       - task: Gradle@1
         displayName: gradlew installArchives
         inputs:
@@ -152,3 +116,28 @@ jobs:
           #findBugsRunAnalysis: false # Optional
           #pmdRunAnalysis: false # Optional
 
+       - task: Gradle@1
+         displayName: gradlew clean
+         inputs:
+           gradleWrapperFile: gradlew
+           # workingDirectory: src\
+           #options: # Optional
+           tasks: clean
+           publishJUnitResults: false
+           #testResultsFiles: '**/build/test-results/TEST-*.xml'
+           #testRunTitle: # Optional
+           #codeCoverageToolOption: 'None' # Optional. Options: none, cobertura, jaCoCo
+           #codeCoverageClassFilesDirectories: 'build/classes/main/' # Required when codeCoverageToolOption == False
+           #codeCoverageClassFilter: # Optional
+           #codeCoverageFailIfEmpty: false # Optional
+           #javaHomeOption: 'JDKVersion' # Options: jDKVersion, path
+           #jdkVersionOption: 'default' # Optional. Options: default, 1.11, 1.10, 1.9, 1.8, 1.7, 1.6
+           #jdkDirectory: # Required when javaHomeOption == Path
+           #jdkArchitectureOption: 'x64' # Optional. Options: x86, x64
+           #gradleOptions: '-Xmx1024m' # Optional
+           #sonarQubeRunAnalysis: false
+           #sqGradlePluginVersionChoice: 'specify' # Required when sonarQubeRunAnalysis == True# Options: specify, build
+           #sonarQubeGradlePluginVersion: '2.6.1' # Required when sonarQubeRunAnalysis == True && SqGradlePluginVersionChoice == Specify
+           #checkStyleRunAnalysis: false # Optional
+           #findBugsRunAnalysis: false # Optional
+           #pmdRunAnalysis: false # Optional

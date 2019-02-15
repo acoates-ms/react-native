@@ -46,6 +46,8 @@ def GlogPath = '..'
 def JSCPath = '../jsc'
 def V8Path = '..'
 
+def hasBoostNuget = file(BoostNugetPath).exists()
+
 task createNativeDepsDirectories {
     thirdPartyNdkDir.mkdirs()
 }
@@ -75,22 +77,18 @@ task prepareV8(dependsOn: createNativeDepsDirectories, type:Copy) {
 }
 
 task prepareBoost(dependsOn: createNativeDepsDirectories, type: Copy) {
-    from BoostNugetPath
-    from tarTree(resources.gzip(downloadBoost.dest))
+    from hasBoostNuget ? BoostNugetPath : tarTree(resources.gzip(downloadBoost.dest))
     from 'src/main/jni/third-party/boost/Android.mk'
-    include 'Android.mk', 'boost_1_63_0/boost/**/*.hpp', 'boost/boost/**/*.hpp'
+    include 'Android.mk', hasBoostNuget ? 'boost/**/*.hpp' : 'boost_1_63_0/boost/**/*.hpp'
     includeEmptyDirs = false
     into "$thirdPartyNdkDir/boost_tmp"
     doLast {
-        if (file("$thirdPartyNdkDir/boost_tmp/boost_1_63_0").exists()) {
+        if (hasBoostNuget) {
+          file("$thirdPartyNdkDir/boost_tmp").renameTo("$thirdPartyNdkDir/boost")
+        } else {
           file("$thirdPartyNdkDir/boost_tmp/boost_1_63_0").renameTo("$thirdPartyNdkDir/boost")
         }
-        if (file("$thirdPartyNdkDir/boost_tmp/boost").exists()) {
-          file("$thirdPartyNdkDir/boost_tmp").renameTo("$thirdPartyNdkDir/boost")
-        }
-        if (file("$thirdPartyNdkDir/boost_tmp/Android.mk").exists()) {
-          file("$thirdPartyNdkDir/boost_tmp/Android.mk").renameTo("$thirdPartyNdkDir/boost/Android.mk")
-        }
+        file("$thirdPartyNdkDir/boost_tmp/Android.mk").renameTo("$thirdPartyNdkDir/boost/Android.mk")
     }
 }
 
