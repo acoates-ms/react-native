@@ -94,13 +94,11 @@ jobs:
         displayName: Remove RNTesterApp.android.bundle
         inputs:
           script: del RNTesterApp.android.bundle
-          workingDirectory: src\react-native\
 
       - task: CmdLine@2
         displayName: Create RNTester bundle
         inputs:
           script: node .\local-cli\cli.js bundle --entry-file .\RNTester\js\RNTesterApp.android.js --bundle-output RNTesterApp.android.bundle --platform android
-          workingDirectory: src\react-native\
 
       - task: Gradle@1
         displayName: gradlew clean
