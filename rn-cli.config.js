@@ -17,41 +17,40 @@ const fs = require('fs');
  * integration tests during local development or on CI services.
  */
 
-const platforms = ['ios', 'android', 'windesktop', 'uwp', 'web', 'macos'];
-
 // In sdx repo we need to use metro-resources to handle all the rush symlinking
-if (fs.existsSync(path.resolve(__dirname, '../../scripts/metro-resources.js'))) {
-  const sdxHelpers = require("../../scripts/metro-resources");
+if (
+  fs.existsSync(path.resolve(__dirname, '../../scripts/metro-resources.js'))
+) {
+  const sdxHelpers = require('../../scripts/metro-resources');
 
   let config = sdxHelpers.createConfig({
-    getPlatforms() {
-      return platforms;
-    },
-
     extraNodeModules: {
       '@microsoft/react-native': __dirname,
     },
 
-    roots: [
-      path.resolve(__dirname)
-    ],
+    roots: [path.resolve(__dirname)],
     projectRoot: __dirname,
 
     getPolyfills,
   });
 
-  config.resolver.extraNodeModules['react-native/Libraries/Image/AssetRegistry'] = path.resolve(__dirname, 'Libraries/Image/AssetRegistry.js');
+  config.resolver.extraNodeModules[
+    'react-native/Libraries/Image/AssetRegistry'
+  ] = path.resolve(__dirname, 'Libraries/Image/AssetRegistry.js');
   module.exports = config;
 } else {
   module.exports = {
-    getPlatforms() {
-      return platforms;
-    },
-
-    extraNodeModules: {
-      'react-native': __dirname,
-      'react-native/Libraries/Image/AssetRegistry': path.resolve(__dirname, 'Libraries/Image/AssetRegistry'),
-    },
     getPolyfills,
+
+    resolver: {
+      extraNodeModules: {
+        'react-native': __dirname,
+        'react-native/Libraries/Image/AssetRegistry': path.resolve(
+          __dirname,
+          'Libraries/Image/AssetRegistry',
+        ),
+      },
+      platforms: ['win32', 'macos', 'android', 'uwp', 'windesktop'],
+    },
   };
 }
