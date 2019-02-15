@@ -11,9 +11,9 @@ function getAndroidPackages {
   # Package names can be obtained using `sdkmanager --list`
   if [ ! -e "$DEPS" ] || [ ! "$CI" ]; then
     echo "Applying circleci Android SDX Licence signing workaround..."
-    yes | sdkmanager --licenses
+    yes | sdkmanager --licenses || echo ""
     echo "Applying circleci Android SDX Licence signing workaround...2"
-    yes | sdkmanager --update
+    yes | sdkmanager --update || echo ""
     echo "Installing Android API level $ANDROID_SDK_TARGET_API_LEVEL, Google APIs, $AVD_ABI system image..."
     sdkmanager "system-images;android-$ANDROID_SDK_TARGET_API_LEVEL;google_apis;$AVD_ABI"
     echo "Installing build SDK for Android API level $ANDROID_SDK_BUILD_API_LEVEL..."
