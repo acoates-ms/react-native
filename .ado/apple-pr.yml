@@ -1,0 +1,207 @@
+# This file defines the Apple PR build steps used during the GitHub CI loop
+name: $(date:yyyyMMdd)$(rev:.r)
+
+trigger: none # will disable CI builds entirely
+
+pr: none # disable on PRs until stable
+
+jobs:
+  - job: AppleRNPR
+    displayName: Apple React Native PR
+    pool:
+      name: OE Mac Pool
+    timeoutInMinutes: 130 # how long to run the job before automatically cancelling
+    cancelTimeoutInMinutes: 5 # how much time to give 'run always even if cancelled tasks' before killing them
+    steps:
+      - checkout: self # self represents the repo where the initial Pipelines YAML file was found
+        clean: true # whether to fetch clean each time
+        fetchDepth: 2 # the depth of commits to ask Git to fetch
+        lfs: false # whether to download Git-LFS files
+        submodules: recursive # set to 'true' for a single level of submodules or 'recursive' to get submodules of submodules
+        persistCredentials: false # set to 'true' to leave the OAuth token in the Git config after the initial fetch
+
+      - task: npmAuthenticate@0
+        displayName: NPM Authenticate # friendly name displayed in the UI
+        inputs:
+          workingFile: common\config\rush\.npmrc
+
+      - task: NuGetCommand@2
+        displayName: Remove Nuget OfficeISS
+        inputs:
+          command: 'custom' # Options: restore, pack, push, custom
+          restoreDirectory:
+          arguments: sources remove -name OfficeISS
+
+      - task: NuGetCommand@2
+        displayName: Remove Nuget Office
+        inputs:
+          command: 'custom' # Options: restore, pack, push, custom
+          restoreDirectory:
+          arguments: sources remove -name Office
+
+      - task: NuGetCommand@2
+        displayName: Add Nuget OfficeISS
+        inputs:
+          command: 'custom' # Options: restore, pack, push, custom
+          restoreDirectory:
+          arguments: sources add -name OfficeISS -source "https://office.pkgs.visualstudio.com/_packaging/OfficeISS/nuget/v3/index.json" -username $(nugetUsername) -password $(nugetPassword)
+
+      - task: NuGetCommand@2
+        displayName: Add Nuget Office
+        inputs:
+          command: 'custom' # Options: restore, pack, push, custom
+          restoreDirectory:
+          arguments: sources add -name Office -source "https://office.pkgs.visualstudio.com/_packaging/Office/nuget/v3/index.json" -username $(nugetUsername) -password $(nugetPassword)
+
+      - task: InstallAppleCertificate@2
+        displayName: 'Install an Apple certificate BudiOSDevCert.p12'
+        inputs:
+          certSecureFile: '18ab5b38-0542-459f-a6d4-295fbdbbd08f'
+
+      - task: InstallAppleCertificate@2
+        displayName: 'Install an Apple certificate BudMacDevCert.p12'
+        inputs:
+          certSecureFile: '321fd796-a04d-461d-a674-f00fda7f2295'
+
+      - task: InstallAppleProvisioningProfile@1
+        displayName: 'Install an Apple provisioning profile iOS_Team_Provisioning_Profile.mobileprovision'
+        inputs:
+          provProfileSecureFile: '7dd1fc59-ccab-4c54-a8ac-f792efc4a855'
+
+      - task: CmdLine@2
+        displayName: npm install
+        inputs:
+          script: npm install
+
+      # - task: Xcode@2
+      #   displayName: 'build/test debug ios ReactNativeHostTestApp'
+      #   inputs:
+      #     configuration: Debug
+      #     sdk: iphonesimulator
+      #     xcWorkspacePath: src/reactNativeHost/test/ReactNativeHostTestApp/ReactNativeHostTestApp.xcodeproj
+      #     scheme: ReactNativeHostTestApp
+      #     packageApp: false
+      #     packageTool: xcrun
+      #     xcode8AutomaticSigning: true
+      #     teamId: $(XCodeSigningMicrosoftTeamID)
+      #     args: '-destination "platform=iOS Simulator,OS=latest,name=iPhone 5s" ONLY_ACTIVE_ARCH=NO -verbose -UseModernBuildSystem=NO'
+      #     outputPattern: '$(agent.builddirectory)/output/iphonesimulator/Debug'
+      #     useXctool: false
+#
+      # - task: Xcode@2
+      #   displayName: 'build release ios ReactNativeHostTestApp'
+      #   inputs:
+      #     configuration: Release
+      #     sdk: iphonesimulator
+      #     xcWorkspacePath: src/reactNativeHost/test/ReactNativeHostTestApp/ReactNativeHostTestApp.xcodeproj
+      #     scheme: ReactNativeHostTestApp
+      #     packageApp: false
+      #     packageTool: xcrun
+      #     xcode8AutomaticSigning: true
+      #     teamId: $(XCodeSigningMicrosoftTeamID)
+      #     args: '-destination "platform=iOS Simulator,OS=latest,name=iPhone 5s" ONLY_ACTIVE_ARCH=NO -verbose -UseModernBuildSystem=NO'
+      #     outputPattern: '$(agent.builddirectory)/output/iphonesimulator/Debug'
+      #     useXctool: false
+
+      - task: ShellScript@2
+        displayName: 'Setup packager and WebSocket test server'
+        inputs:
+          scriptPath: 'scripts/vsto-test-setup.sh'
+          disableAutoCwd: true
+
+      - task: Npm@0
+        displayName: 'npm test'
+        inputs:
+          command: test
+
+      - task: Xcode@2
+        displayName: 'Xcode macOS test'
+        inputs:
+          actions: 'build test'
+          configuration: 'Debug'
+          sdk: 'macosx'
+          xcWorkspacePath: 'RNTester/RNTester.xcodeproj'
+          scheme: 'RNTester-macOS'
+          packageApp: false
+          packageTool: xcrun
+          xcode8AutomaticSigning: true
+          teamId: '$(XCodeSigningMicrosoftTeamID)'
+          args: '-destination "platform=macOS,arch=x86_64" ONLY_ACTIVE_ARCH=NO -verbose -UseModernBuildSystem=NO'
+          outputPattern: '$(agent.builddirectory)/output/$macosx/Debug'
+          useXcpretty: true
+          publishJUnitResults: true
+          useXctool: false
+          xctoolReporter: 'junit:test-results.xml'
+
+      - task: Xcode@2
+        displayName: 'Xcode iOS test'
+        inputs:
+          actions: 'build test'
+          configuration: 'Debug'
+          sdk: 'iphonesimulator'
+          xcWorkspacePath: 'RNTester/RNTester.xcodeproj'
+          scheme: RNTester
+          packageApp: false
+          packageTool: xcrun
+          xcode8AutomaticSigning: true
+          teamId: '$(XCodeSigningMicrosoftTeamID)'
+          args: '-destination "platform=iOS Simulator,OS=latest,name=iPhone 5s" ONLY_ACTIVE_ARCH=NO -verbose -UseModernBuildSystem=NO'
+          outputPattern: '$(agent.builddirectory)/output/iphonesimulator/Debug'
+          useXcpretty: true
+          publishJUnitResults: true
+          useXctool: false
+          xctoolReporter: 'junit:test-results.xml'
+
+      - task: Xcode@2
+        displayName: 'Xcode tvOS test'
+        inputs:
+          actions: 'build test'
+          configuration: 'Debug'
+          xcWorkspacePath: 'RNTester/RNTester.xcodeproj'
+          scheme: 'RNTester-tvOS'
+          packageApp: false
+          packageTool: xcrun
+          xcode8AutomaticSigning: true
+          teamId: '$(XCodeSigningMicrosoftTeamID)'
+          args: '-destination "platform=tvOS Simulator,OS=latest,name=Apple TV" ONLY_ACTIVE_ARCH=NO -verbose -UseModernBuildSystem=NO'
+          outputPattern: '$(agent.builddirectory)/output/iphoneos/Debug'
+          useXcpretty: true
+          publishJUnitResults: true
+          useXctool: false
+          xctoolReporter: 'junit:test-results.xml'
+
+      - task: Xcode@2
+        displayName: 'Xcode macOS build'
+        inputs:
+          sdk: 'macosx'
+          xcWorkspacePath: 'RNTester/RNTester.xcodeproj'
+          scheme: 'RNTester-macOS'
+          packageApp: false
+          packageTool: xcrun
+          xcode8AutomaticSigning: true
+          teamId: '$(XCodeSigningMicrosoftTeamID)'
+          args: 'ONLY_ACTIVE_ARCH=NO -verbose -UseModernBuildSystem=NO'
+          outputPattern: '$(agent.builddirectory)/output/macosx/Release'
+          useXctool: false
+
+      - task: Xcode@2
+        displayName: 'Xcode iOS build'
+        inputs:
+          xcWorkspacePath: 'RNTester/RNTester.xcodeproj'
+          scheme: iosDeviceBuild
+          packageApp: false
+          packageTool: xcrun
+          xcode8AutomaticSigning: true
+          teamId: '$(XCodeSigningMicrosoftTeamID)'
+          args: 'ONLY_ACTIVE_ARCH=NO -verbose -UseModernBuildSystem=NO AD_HOC_CODE_SIGNING_ALLOWED=NO CODE_SIGN_IDENTITY="iPhone Developer" CODE_SIGN_INJECT_BASE_ENTITLEMENTS= ENTITLEMENTS_DESTINATION= -allowProvisioningUpdates'
+          outputPattern: '$(agent.builddirectory)/output/iphoneos/Release'
+          useXctool: false
+
+          steps:
+
+      - task: ShellScript@2
+        displayName: 'Cleanup packager and WebSocket test server'
+        inputs:
+          scriptPath: 'scripts/vsto-test-cleanup.sh'
+          disableAutoCwd: true
+        condition: always()
