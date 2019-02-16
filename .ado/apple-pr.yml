@@ -20,10 +20,10 @@ jobs:
         submodules: recursive # set to 'true' for a single level of submodules or 'recursive' to get submodules of submodules
         persistCredentials: false # set to 'true' to leave the OAuth token in the Git config after the initial fetch
 
-      - task: npmAuthenticate@0
-        displayName: NPM Authenticate # friendly name displayed in the UI
-        inputs:
-          workingFile: common\config\rush\.npmrc
+      # - task: npmAuthenticate@0
+      #   displayName: NPM Authenticate # friendly name displayed in the UI
+      #   inputs:
+      #     workingFile: common\config\rush\.npmrc
 
       - task: NuGetCommand@2
         displayName: Remove Nuget OfficeISS
