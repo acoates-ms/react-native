@@ -114,6 +114,11 @@ jobs:
         inputs:
           command: test
 
+      - task: ShellScript@2
+        displayName: 'Install third party code dependencies'
+        inputs:
+          scriptPath: 'scripts/ios-install-third-party.sh'
+
       - task: Xcode@2
         displayName: 'Xcode macOS test'
         inputs:
