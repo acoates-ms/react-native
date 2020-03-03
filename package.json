@@ -1,7 +1,7 @@
 {
-  "name": "react-native",
-  "version": "0.60.0-microsoft.53",
-  "description": "[Microsoft Fork] A framework for building native apps using React",
+  "name": "react-native-macos",
+  "version": "0.60.53",
+  "description": "Build macOS desktop applications using react-native",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -147,10 +147,14 @@
     "mkdirp": "^0.5.1",
     "prettier": "1.17.0",
     "react": "16.8.6",
+    "react-native": "^0.60.6",
     "react-test-renderer": "16.8.6",
     "shelljs": "^0.7.8",
     "ws": "^6.1.4",
     "yargs": "^9.0.0"
+  },
+  "peerDependencies": {
+    "react-native": "^0.60.0-0"
   },
   "detox": {
     "test-runner": "jest",
